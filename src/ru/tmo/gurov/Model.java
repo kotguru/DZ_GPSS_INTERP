@@ -6,6 +6,9 @@ import java.util.Random;
 
 public class Model
 {
+    public static final int TC = 426;
+    public static final int TS = 94;
+
     public static ArrayList<Transact> CEC;
     public static ArrayList<Transact> FEC;
 
@@ -14,7 +17,8 @@ public class Model
     public static Random Gen = new Random();
     public static double CurrentTime = 0;
     public static int StartCount = 1;
-    public static int ChannelsNum = 5;
+    public static int channelsNum = 2;
+    public static int busyChannelsNum = 0;
     public static int TACount = 1;
     public static boolean MRFRLogic = false;
     public static int ModelingTime = 480;
@@ -53,8 +57,6 @@ public class Model
 
     public static void TimerCorrectionPhase()
     {
-        FEC.add(new Transact(TACount++, CurrentTime + Uniform(0, 94), 2 ));
-
         FEC.sort(new Comparator<Transact>() {
             @Override
             public int compare(Transact transact, Transact t1) {
@@ -65,6 +67,10 @@ public class Model
 //        PrintChain(FEC);
 
         Transact first = new Transact(FEC.get(0));
+        if (first.GeneratorNum == 2)
+        {
+            FEC.add(new Transact(TACount++, first.TimeToNextPoint + Uniform(0, TS), 2));
+        }
         CEC.add(first);
         FEC.remove(0);
         ArrayList<Transact> tmp = new ArrayList<Transact>();
@@ -75,10 +81,6 @@ public class Model
             {
                 tmp.add(tr);
                 CEC.add(new Transact(tr));
-            }
-            else
-            {
-                break;
             }
         }
 
@@ -111,8 +113,15 @@ public class Model
         {
             end = false;
             ArrayList<Transact> tmp = new ArrayList<Transact>(CEC);
+            ArrayList<Transact> tmp2 = new ArrayList<Transact>();
 
-            System.out.println("_tmp_");
+            tmp.sort(new Comparator<Transact>() {
+                @Override
+                public int compare(Transact transact, Transact t1) {
+                    return Double.compare(t1.GeneratorNum, transact.GeneratorNum);
+                }
+            });
+
             PrintChain(tmp);
             for (Transact tr: tmp
                  ) {
@@ -120,50 +129,66 @@ public class Model
                 {
                     case (2):
                     {
+                        if (channelsNum == busyChannelsNum)
+                        {
+                            tr.GeneratorNum = 3;
+                        }
+                        else
+                        {
+                            tr.GeneratorNum = 6;
+                            tr.TimeToNextPoint += Uniform(0, TC);
+                            busyChannelsNum++;
 
+                            tmp2.add(tr);
+//                            tmp.remove(tr);
+                        }
                         break;
                     }
 
                     case (3):
                     {
-                        break;
-                    }
+                        if (busyChannelsNum < channelsNum)
+                        {
+                            tr.GeneratorNum = 6;
+                            tr.TimeToNextPoint += Uniform(0, TC);
+                            busyChannelsNum++;
 
-                    case (4):
-                    {
-                        break;
-                    }
-
-                    case (5):
-                    {
+                            tmp2.add(tr);
+//                            tmp.remove(tr);
+                        }
                         break;
                     }
 
                     case (6):
                     {
-                        break;
-                    }
-
-                    case (7):
-                    {
-                        break;
-                    }
-
-                    case (8):
-                    {
+                        tr.GeneratorNum = 8;
+                        CEC.remove(tr);
+//                        tmp.remove(tr);
+                        busyChannelsNum--;
                         break;
                     }
 
                     case (9):
                     {
                         CEC.remove(tr);
-                        StartCount -= 1;
+                        StartCount --;
                         return;
                     }
                     default:
                         throw new IllegalStateException("Unexpected value: " + tr.GeneratorNum);
                 }
             }
+
+            for (Transact tr: tmp2
+                 ) {
+                FEC.add(tr);
+            }
+
+            for (Transact tr: tmp2
+                 ) {
+                CEC.remove(tr);
+            }
+//            CEC = tmp;
         }
     }
 }
