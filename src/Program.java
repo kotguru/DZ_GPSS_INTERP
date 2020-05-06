@@ -2,7 +2,7 @@ import ru.tmo.gurov.Model;
 
 public class Program
 {
-    static void Main(String[] args)
+    public static void main(String[] args)
     {
         Model.InsertPhase();
         while (Model.StartCount != 0)
