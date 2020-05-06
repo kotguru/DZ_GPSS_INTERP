@@ -7,6 +7,16 @@ public class Transact
     public int GeneratorNum;
     public int RoadMark;
 
+    @Override
+    public String toString() {
+        return "Transact{" +
+                "TAnum=" + TAnum +
+                ", TimeToNextPoint=" + TimeToNextPoint +
+                ", GeneratorNum=" + GeneratorNum +
+                ", RoadMark=" + RoadMark +
+                '}';
+    }
+
     public Transact(int num, double startTime, int generator)
     {
         TAnum = num;
