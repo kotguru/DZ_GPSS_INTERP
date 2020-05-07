@@ -10,5 +10,7 @@ public class Program
             Model.TimerCorrectionPhase();
             Model.LookPhase();
         }
+
+        Model.Graph(Model.series);
     }
 }
