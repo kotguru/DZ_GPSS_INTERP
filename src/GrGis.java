@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class GrGis extends JFrame {
     public static double y[] = new double[20];
-    public static String col[] = {"BLUE", "RED", "GREEN"};//массив цветов
+    public static String col[] = {"BLUE", "RED"};//массив цветов
 
     public GrGis(Map<Integer, Double> queueDict, Map<Integer, Double> channelsDict) {
         super("Обычная гистограмма");

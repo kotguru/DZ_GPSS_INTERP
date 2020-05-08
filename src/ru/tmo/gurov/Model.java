@@ -5,15 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.JFrame;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
 public class Model
 {
     public static final int TC = 213;
@@ -27,10 +18,10 @@ public class Model
     public static Random Gen = new Random();
     public static double CurrentTime = 0;
     public static int StartCount = 1;
-    public static int channelsNum = 5;
+    public static int channelsNum = 8;
     public static int TACount = 1;
     public static boolean MRFRLogic = false;
-    public static int ModelingTime = 480;
+    public static int ModelingTime = 1480;
 
     public static Integer currentQueueLen = 0;
     public static Integer busyChannelsNum = 0;
@@ -59,28 +50,28 @@ public class Model
 //        }
 //    }
 
-    public static void Graph(XYSeries series)
-    {
-//        XYSeries series = new XYSeries("sin(a)");
-
-        for(float i = 0; i < Math.PI; i+=0.1){
-            series.add(i, Math.sin(i));
-        }
-
-        XYDataset xyDataset = new XYSeriesCollection(series);
-        JFreeChart chart = ChartFactory
-                .createXYLineChart("y = queue", "x", "y",
-                        xyDataset,
-                        PlotOrientation.VERTICAL,
-                        true, true, true);
-        JFrame frame =
-                new JFrame("MinimalStaticChart");
-        // Помещаем график на фрейм
-        frame.getContentPane()
-                .add(new ChartPanel(chart));
-        frame.setSize(400,300);
-        frame.show();
-    }
+//    public static void Graph(XYSeries series)
+//    {
+////        XYSeries series = new XYSeries("sin(a)");
+//
+//        for(float i = 0; i < Math.PI; i+=0.1){
+//            series.add(i, Math.sin(i));
+//        }
+//
+//        XYDataset xyDataset = new XYSeriesCollection(series);
+//        JFreeChart chart = ChartFactory
+//                .createXYLineChart("y = queue", "x", "y",
+//                        xyDataset,
+//                        PlotOrientation.VERTICAL,
+//                        true, true, true);
+//        JFrame frame =
+//                new JFrame("MinimalStaticChart");
+//        // Помещаем график на фрейм
+//        frame.getContentPane()
+//                .add(new ChartPanel(chart));
+//        frame.setSize(400,300);
+//        frame.show();
+//    }
 
     public static void InsertPhase()
     {
@@ -211,7 +202,7 @@ public class Model
                     case (6):
                     {
                         tr.GeneratorNum = 8;
-                        System.out.println(tr);
+//                        System.out.println(tr);
                         CEC.remove(tr);
                         busyChannelsNum--;
                         break;
