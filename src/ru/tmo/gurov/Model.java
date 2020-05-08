@@ -30,13 +30,13 @@ public class Model
     public static int channelsNum = 5;
     public static int TACount = 1;
     public static boolean MRFRLogic = false;
-    public static int ModelingTime = 14800;
+    public static int ModelingTime = 480;
 
     public static Integer currentQueueLen = 0;
     public static Integer busyChannelsNum = 0;
     public static Map<Integer, Double> queueDict = new HashMap<>();
-    public static XYSeries series = new XYSeries("queue");
-    public static XYDataset queueDataset = new XYSeriesCollection();
+//    public static XYSeries series = new XYSeries("queue");
+//    public static XYDataset queueDataset = new XYSeriesCollection();
     public static Map<Integer, Double> channelsDict = new HashMap<>();
 
     public static double Uniform(double a, double b)
@@ -126,14 +126,14 @@ public class Model
         {
             Double a = queueDict.get(currentQueueLen);
             a += dt;
-            series.add(currentQueueLen, a);
+//            series.add(currentQueueLen, a);
             queueDict.put(currentQueueLen, a);
 //            System.out.println(series);
         }
         else
         {
             Double t = dt;
-            series.add(currentQueueLen, t);
+//            series.add(currentQueueLen, t);
             queueDict.put(currentQueueLen, dt);
         }
 
