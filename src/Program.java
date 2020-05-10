@@ -34,15 +34,15 @@ public class Program
 //        }
 //        System.out.println("___________________________1___________________________");
 //        GrGis gr2 = new GrGis (Model.channelsDict);
-        for (int i = 0; i < 20; i++)
-        {
-            System.out.println("queueDict.put(" + i + "," + Model.queueDict.getOrDefault(i, 0.0) + ");");
-        }
-
-        for (int i = 0; i < 20; i++)
-        {
-            System.out.println("channelsDist.put(" + i + "," + Model.channelsDict.getOrDefault(i, 0.0) + ");");
-        }
+//        for (int i = 0; i < 20; i++)
+//        {
+//            System.out.println("queueDict.put(" + i + "," + Model.queueDict.getOrDefault(i, 0.0) + ");");
+//        }
+//
+//        for (int i = 0; i < 20; i++)
+//        {
+//            System.out.println("channelsDist.put(" + i + "," + Model.channelsDict.getOrDefault(i, 0.0) + ");");
+//        }
 //        gr2.setVisible(true);
     }
 }

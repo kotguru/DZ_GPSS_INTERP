@@ -84,6 +84,28 @@ public class Model
 
     public static void TimerCorrectionPhase()
     {
+        for (Transact tr: FEC
+             ) {
+            switch (tr.GeneratorNum)
+            {
+                case (2):
+                {
+                    tr.RoadMark = 6;
+                }
+                case (3):
+                {
+                    tr.RoadMark = 6;
+                }
+                case (6):
+                {
+                    tr.RoadMark = 8;
+                }
+                case (9):
+                {
+                    tr.RoadMark = 10;
+                }
+            }
+        }
         FEC.sort((transact, t1) -> -Double.compare(t1.TimeToNextPoint, transact.TimeToNextPoint));
 
         Transact first = new Transact(FEC.get(0));
@@ -202,7 +224,7 @@ public class Model
                     case (6):
                     {
                         tr.GeneratorNum = 8;
-//                        System.out.println(tr);
+                        System.out.println(tr);
                         CEC.remove(tr);
                         busyChannelsNum--;
                         break;
@@ -211,6 +233,7 @@ public class Model
                     case (9):
                     {
                         CEC.remove(tr);
+                        System.out.println(tr);
                         StartCount--;
                         return;
                     }
