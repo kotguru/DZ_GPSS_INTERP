@@ -18,7 +18,7 @@ public class Model
     public static Random Gen = new Random();
     public static double CurrentTime = 0;
     public static int StartCount = 1;
-    public static int channelsNum = 8;
+    public static int channelsNum = 5;
     public static int TACount = 1;
     public static boolean MRFRLogic = false;
     public static int ModelingTime = 1480;
@@ -80,32 +80,21 @@ public class Model
         Gen = new Random();
         FEC.add(new Transact(TACount++, 0, 2));
         FEC.add(new Transact(TACount++, ModelingTime, 9));
+        for (Transact tr: FEC
+             ) {
+            if (tr.GeneratorNum == 2)
+            {
+                tr.RoadMark = 6;
+            }
+            else
+            {
+                tr.RoadMark = 10;
+            }
+        }
     }
 
     public static void TimerCorrectionPhase()
     {
-        for (Transact tr: FEC
-             ) {
-            switch (tr.GeneratorNum)
-            {
-                case (2):
-                {
-                    tr.RoadMark = 6;
-                }
-                case (3):
-                {
-                    tr.RoadMark = 6;
-                }
-                case (6):
-                {
-                    tr.RoadMark = 8;
-                }
-                case (9):
-                {
-                    tr.RoadMark = 10;
-                }
-            }
-        }
         FEC.sort((transact, t1) -> -Double.compare(t1.TimeToNextPoint, transact.TimeToNextPoint));
 
         Transact first = new Transact(FEC.get(0));
@@ -161,6 +150,30 @@ public class Model
             channelsDict.put(busyChannelsNum, dt);
         }
 
+        for (Transact tr: FEC
+        ) {
+            switch (tr.GeneratorNum)
+            {
+                case (2):
+                case (3): {
+                    tr.RoadMark = 6;
+                    break;
+                }
+                case (6):
+                {
+                    tr.RoadMark = 8;
+                    break;
+                }
+                case (9):
+                {
+                    tr.RoadMark = 10;
+                    break;
+                }
+                default:
+                    throw new IllegalStateException("Unexpected value: " + tr.GeneratorNum);
+            }
+        }
+
         if(!MRFRLogic)
             TimeToChangeSpeed += dt;
 
@@ -170,6 +183,10 @@ public class Model
              ) {
             tr.TimeToNextPoint = first.TimeToNextPoint;
         }
+//        for (Transact tr: CEC
+//             ) {
+//            System.out.println(tr);
+//        }
     }
     
     public static void LookPhase()
@@ -181,22 +198,30 @@ public class Model
             ArrayList<Transact> tmp = new ArrayList<>(CEC);
             ArrayList<Transact> tmp2 = new ArrayList<>();
 
-            tmp.sort((transact, t1) -> Double.compare(t1.GeneratorNum, transact.GeneratorNum));
+//            tmp.sort((transact, t1) -> Double.compare(t1.GeneratorNum, transact.GeneratorNum));
 
             for (Transact tr: tmp
                  ) {
-                switch (tr.GeneratorNum)
+                switch (tr.RoadMark)
                 {
-                    case (2):
+                    case (6):
                     {
                         if (channelsNum == busyChannelsNum)
                         {
                             tr.GeneratorNum = 3;
-                            currentQueueLen++;
+                            if (tr.GeneratorNum == 2)
+                            {
+                                currentQueueLen++;
+                            }
                         }
                         else
                         {
+                            if (tr.GeneratorNum == 3)
+                            {
+                                currentQueueLen++;
+                            }
                             tr.GeneratorNum = 6;
+                            tr.RoadMark = 8;
 //                            tr.TimeToNextPoint += Uniform(0, TC);
                             tr.TimeToNextPoint += Exponential(TC);
                             busyChannelsNum++;
@@ -206,31 +231,32 @@ public class Model
                         break;
                     }
 
-                    case (3):
-                    {
-                        if (busyChannelsNum < channelsNum)
-                        {
-                            tr.GeneratorNum = 6;
-//                            tr.TimeToNextPoint += Uniform(0, TC);
-                            tr.TimeToNextPoint += Exponential(TC);
-                            currentQueueLen--;
-                            busyChannelsNum++;
+//                    case (3):
+//                    {
+//                        if (busyChannelsNum < channelsNum)
+//                        {
+//                            tr.GeneratorNum = 6;
+////                            tr.TimeToNextPoint += Uniform(0, TC);
+//                            tr.TimeToNextPoint += Exponential(TC);
+//                            currentQueueLen--;
+//                            busyChannelsNum++;
+//
+//                            tmp2.add(tr);
+//                        }
+//                        break;
+//                    }
 
-                            tmp2.add(tr);
-                        }
-                        break;
-                    }
-
-                    case (6):
+                    case (8):
                     {
                         tr.GeneratorNum = 8;
                         System.out.println(tr);
                         CEC.remove(tr);
                         busyChannelsNum--;
+                        end = true;
                         break;
                     }
 
-                    case (9):
+                    case (10):
                     {
                         CEC.remove(tr);
                         System.out.println(tr);
