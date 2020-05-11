@@ -134,7 +134,7 @@ public class Model
         }
         else
         {
-            Double t = dt;
+//            Double t = dt;
 //            series.add(currentQueueLen, t);
             queueDict.put(currentQueueLen, dt);
         }
@@ -208,11 +208,11 @@ public class Model
                     {
                         if (channelsNum == busyChannelsNum)
                         {
-                            tr.GeneratorNum = 3;
                             if (tr.GeneratorNum == 2)
                             {
                                 currentQueueLen++;
                             }
+                            tr.GeneratorNum = 3;
                         }
                         else
                         {
